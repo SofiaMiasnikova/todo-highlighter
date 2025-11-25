@@ -1,5 +1,14 @@
 const vscode = require('vscode');
 
+/**
+ * Набор поддерживаемых типов специальных комментариев.
+ * Для каждого типа определяются:
+ *  - регулярное выражение для поиска
+ *  - цвет подсветки
+ *  - объект украшения (создаётся при активации)
+ *
+ * @type {Object.<string, {regex: RegExp, color: string, decorationType: vscode.TextEditorDecorationType|null}>}
+ */
 const COMMENT_TYPES = {
     TODO: {
         regex: /\/\/\s*TODO:?.*/g,
@@ -18,24 +27,45 @@ const COMMENT_TYPES = {
     }
 };
 
+/**
+ * Функция активации расширения.
+ * Вызывается VS Code при первом запуске или при наступлении событий из activationEvents.
+ *
+ * Выполняет:
+ *  - регистрацию команды
+ *  - создание объектов подсветки
+ *  - подключение обработчиков событий
+ *  - начальный запуск подсветки
+ *
+ * @param {vscode.ExtensionContext} context — Контекст выполнения расширения.
+ */
 function activate(context) {
-    // Регистрируем команду для Cmd+Shift+P
+
+    /**
+     * Регистрируем тестовую команду.
+     * Она появляется в Command Palette и показывает, что расширение работает.
+     */
     const disposable = vscode.commands.registerCommand(
         'todo-highlighter.helloWorld',
-        () => {
-            vscode.window.showInformationMessage('TODO Highlighter работает!');
-        }
+        () => vscode.window.showInformationMessage('TODO Highlighter работает!')
     );
     context.subscriptions.push(disposable);
 
-    // создаём decoration types
+    /**
+     * Создаём “decorations” — стили подсветки для каждого типа комментариев.
+     */
     for (const key in COMMENT_TYPES) {
-        COMMENT_TYPES[key].decorationType = vscode.window.createTextEditorDecorationType({
-            backgroundColor: COMMENT_TYPES[key].color, // можно без альфы, чтобы наверняка
-            border: `1px solid ${COMMENT_TYPES[key].color}`
-        });
+        COMMENT_TYPES[key].decorationType =
+            vscode.window.createTextEditorDecorationType({
+                backgroundColor: COMMENT_TYPES[key].color,
+                border: `1px solid ${COMMENT_TYPES[key].color}`
+            });
     }
 
+    /**
+     * Основная функция обновления подсветки.
+     * Находит TODO/FIXME/HACK в документе и выделяет их соответствующими стилями.
+     */
     function updateDecorations() {
         const editor = vscode.window.activeTextEditor;
         if (!editor) return;
@@ -47,8 +77,7 @@ function activate(context) {
             const regex = type.regex;
             const ranges = [];
 
-            // важно: сбросить позицию поиска
-            regex.lastIndex = 0;
+            regex.lastIndex = 0; // обязательно сбрасывать для глобальных regex
 
             let match;
             while ((match = regex.exec(text)) !== null) {
@@ -61,20 +90,35 @@ function activate(context) {
         }
     }
 
-    // подписки на события
-    vscode.window.onDidChangeActiveTextEditor(updateDecorations, null, context.subscriptions);
-    vscode.workspace.onDidChangeTextDocument(event => {
-        if (vscode.window.activeTextEditor && event.document === vscode.window.activeTextEditor.document) {
-            updateDecorations();
-        }
-    }, null, context.subscriptions);
+    // Событие: смена активного редактора
+    vscode.window.onDidChangeActiveTextEditor(
+        updateDecorations,
+        null,
+        context.subscriptions
+    );
 
+    // Событие: изменение текста в документе
+    vscode.workspace.onDidChangeTextDocument(
+        event => {
+            if (
+                vscode.window.activeTextEditor &&
+                event.document === vscode.window.activeTextEditor.document
+            ) {
+                updateDecorations();
+            }
+        },
+        null,
+        context.subscriptions
+    );
+
+    // Первый запуск подсветки
     updateDecorations();
 }
 
+/**
+ * Функция деактивации расширения.
+ * Вызывается при закрытии VS Code или выгрузке расширения.
+ */
 function deactivate() {}
 
-module.exports = {
-    activate,
-    deactivate
-};
+module.exports = { activate, deactivate };

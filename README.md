@@ -1,65 +1,52 @@
-# todo-highlighter README
+# Плагин «todo-highlighter»
 
-This is the README for your extension "todo-highlighter". After writing up a brief description, we recommend including the following sections.
+**Автор:** Мясникова Софья Кирилловна, группа М3106  
 
-## Features
+## Описание
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+`todo-highlighter` — это расширение для Visual Studio Code, которое автоматически находит в коде специальные комментарии и подсвечивает их разными цветами, чтобы их было легче заметить и не забыть о доработках.
 
-For example if there is an image subfolder under your extension project workspace:
+Поддерживаются следующие типы комментариев (формат `//`):
 
-\!\[feature X\]\(images/feature-x.png\)
+- `// TODO` — задачи на будущее;
+- `// FIXME` — места, где есть ошибки и требуется исправление;
+- `// HACK` — временные решения.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Возможности плагина
 
-## Requirements
+1. **Автоматический поиск специальных комментариев**
+   - Расширение сканирует текст активного документа и находит все строки, совпадающие с шаблонами:
+     - `// TODO ...`
+     - `// FIXME ...`
+     - `// HACK ...`
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+2. **Разная подсветка для разных типов комментариев**
+   - Для каждого типа комментариев используется свой стиль оформления:
+     - `TODO` — розовый;
+     - `FIXME` — оранжевый;
+     - `HACK` — фиолетовый.
 
-## Extension Settings
+3. **Автоматическое обновление подсветки**
+   - Подсветка обновляется автоматически:
+     - при изменении текста в документе;
+     - при переключении вкладки.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+4. **Работа с любыми файлами, использующими комментарии вида `//`**
+   Подсветка будет работать в JavaScript, TypeScript, C++ и других языках с такими комментариями.
 
-For example:
+5. **Команда в Command Palette**
+   - Плагин предоставляет команду:
+     - **`TODO Highlighter: Hello World`**
+   - Её можно вызвать через `Cmd+Shift+P` / `Ctrl+Shift+P`, начав вводить название.
 
-This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Технические детали
 
-## Known Issues
+- Расширение написано на **JavaScript** с использованием **VS Code Extension API**.
+- Логика работы располагается в файле `extension.js`:
+  - инициализация типов комментариев и их стилей;
+  - регистрация команды;
+  - обработка событий изменения документа и активного редактора;
+  - функция обновления подсветки для текущего файла.
+- Конфигурация расширения (название, команды, события активации и версия VS Code) описана в файле `package.json`.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
