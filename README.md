@@ -32,8 +32,8 @@
 
 1. Скачать файл расширения todo-highlighter-0.0.1.vsix
 2. Открыть VS Code для своего проекта
-Установить расширение:
-- нажать Ctrl+Shift+P (или Cmd+Shift+P на Mac)
-- ввести: Extensions: Install from VSIX
-- выбрать файл todo-highlighter-0.0.1.vsix
-- нажать "Install"
+3. Установить расширение:
+  - нажать Ctrl+Shift+P (или Cmd+Shift+P на Mac)
+  - ввести: Extensions: Install from VSIX
+  - выбрать файл todo-highlighter-0.0.1.vsix
+  - нажать "Install"
