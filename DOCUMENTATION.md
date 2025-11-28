@@ -29,7 +29,7 @@ todo-highlighter/
 ├── README.md             # описание для пользователей.
 ├── REPORT.md             # отчет.
 └── DOCUMENTATION.md      # техническое описание.
-
+```
 
 ---
 
@@ -56,4 +56,4 @@ updateDecorations()
   ├─ находит TODO/FIXME/HACK по regex
   ├─ вычисляет диапазоны Range
   └─ применяет стили setDecorations()
-
+```
